@@ -2,8 +2,14 @@ import { existsSync, readFileSync } from 'fs';
 
 import defaultSettings from '../../proxy.config.json';
 import { configFile } from './file';
-import { Authentication, AuthorisedRepo, Database, TempPasswordConfig, UserSettings } from './types';
-
+import {
+  Authentication,
+  AuthorisedRepo,
+  Database,
+  RateLimitConfig,
+  TempPasswordConfig,
+  UserSettings,
+} from './types';
 
 let _userSettings: UserSettings | null = null;
 if (existsSync(configFile)) {
@@ -25,6 +31,8 @@ let _urlShortener: string = defaultSettings.urlShortener;
 let _contactEmail: string = defaultSettings.contactEmail;
 let _csrfProtection: boolean = defaultSettings.csrfProtection;
 let _domains: Record<string, unknown> = defaultSettings.domains;
+let _rateLimit: RateLimitConfig = defaultSettings.rateLimit;
+
 // These are not always present in the default config file, so casting is required
 let _sslKeyPath: string = (defaultSettings as any).sslKeyPemPath;
 let _sslCertPath: string = (defaultSettings as any).sslCertPemPath;
@@ -93,6 +101,7 @@ export const logConfiguration = () => {
   console.log(`authorisedList = ${JSON.stringify(getAuthorisedList())}`);
   console.log(`data sink = ${JSON.stringify(getDatabase())}`);
   console.log(`authentication = ${JSON.stringify(getAuthentication())}`);
+  console.log(`rateLimit = ${JSON.stringify(getRateLimit())}`);
 };
 
 export const getAPIs = () => {
@@ -170,7 +179,7 @@ export const getPlugins = () => {
     _plugins = _userSettings.plugins;
   }
   return _plugins;
-}
+};
 
 export const getSSLKeyPath = () => {
   if (_userSettings && _userSettings.sslKeyPemPath) {
@@ -197,4 +206,11 @@ export const getDomains = () => {
     _domains = _userSettings.domains;
   }
   return _domains;
+};
+
+export const getRateLimit = () => {
+  if (_userSettings && _userSettings.rateLimit) {
+    _rateLimit = _userSettings.rateLimit;
+  }
+  return _rateLimit;
 };
