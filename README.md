@@ -38,7 +38,8 @@
 </div>
 <br />
 
-## What is GitProxy
+
+## What is GitProxy - Hi Hemant
 
 GitProxy is an application that stands between developers and a Git remote endpoint (e.g., `github.com`). It applies rules and workflows (configurable as `plugins`) to all outgoing `git push` operations to ensure they are compliant.
 
