@@ -1,5 +1,5 @@
 import { Action, Step } from '../../actions';
-import fs from 'fs'
+import fs from 'fs';
 import git from 'isomorphic-git';
 import gitHttpClient from 'isomorphic-git/http/node';
 
@@ -22,24 +22,23 @@ const exec = async (req: any, action: Action): Promise<Action> => {
     }
 
     const cmd = `git clone ${action.url}`;
-    step.log(`Exectuting ${cmd}`);
+    step.log(`Executing ${cmd}`);
 
     const authHeader = req.headers?.authorization;
     const [username, password] = Buffer.from(authHeader.split(' ')[1], 'base64')
       .toString()
       .split(':');
 
-    await git
-      .clone({
-        fs,
-        http: gitHttpClient,
-        url: action.url,
-        onAuth: () => ({
-          username,
-          password,
-        }),
-        dir: `${action.proxyGitPath}/${action.repoName}`,
-      });
+    await git.clone({
+      fs,
+      http: gitHttpClient,
+      url: action.url,
+      onAuth: () => ({
+        username,
+        password,
+      }),
+      dir: `${action.proxyGitPath}/${action.repoName}`,
+    });
 
     console.log('Clone Success: ', action.url);
 
